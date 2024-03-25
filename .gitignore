@@ -1,10 +1,11 @@
 # Ignore
-#.idea/
-#.RData
-#.Rhistory
+.idea/
+.RData
+.Rhistory
+.DS_Store
 
 # Private Data
 ETH_VIC/
 
 # Resulting Plots
-#*.pdf
+*.pdf
