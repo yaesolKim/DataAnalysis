@@ -1,0 +1,10 @@
+# Private Data
+Data/
+
+#
+.idea/
+.RData
+.Rhistory
+
+# Resulting Plots
+*.pdfss
