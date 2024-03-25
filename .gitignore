@@ -1,0 +1,10 @@
+# Ignore
+#.idea/
+#.RData
+#.Rhistory
+
+# Private Data
+../ETH_VIC/FFH/
+
+# Resulting Plots
+#*.pdf

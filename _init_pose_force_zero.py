@@ -43,7 +43,7 @@ def change_data_in_worksheet(filename, worksheet_name, num_row, ep, ef, rp, rf):
     workbook.save(filename)
     print(f"Cells updated in worksheet '{worksheet_name}' in '{filename}'.")
 
-wb_name = 'xlsx/data.xlsx'
+wb_name = 'ETH_VIC/data.ETH_VIC'
 ws1_name = '20 (2)'
 ws2_name = '50 (2)'
 ws3_name = '60 (2)'
