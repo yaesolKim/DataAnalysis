@@ -2,8 +2,8 @@ library(ggplot2)
 library(readxl)
 library(RColorBrewer)
 
-#excel_data <- read_excel("questionnaires.xlsx", sheet = "Sheet1")
-excel_data <- read_excel("questionnaires.xlsx", sheet = "Sheet5")
+#excel_data <- read_excel("./FFH/questionnaires.xlsx", sheet = "Sheet1")
+excel_data <- read_excel("./FFH/questionnaires.xlsx", sheet = "Sheet5")
 label_x = "Scenario"
 label_y = "Answer (7-point Likert Scale)"
 

@@ -5,10 +5,10 @@ library(RColorBrewer)
 
 
 # Read data from Excel file
-#excel_data <- read_excel("execution_time.xlsx", sheet = "ex2")
-#excel_data <- read_excel("execution_time.xlsx", sheet = "ex3")
-#excel_data <- read_excel("execution_time.xlsx", sheet = "ex2_ex3")
-excel_data <- read_excel("execution_time.xlsx", sheet = "ex2_ex3")
+#excel_data <- read_excel("./FFH/execution_time.xlsx", sheet = "ex2")
+#excel_data <- read_excel("./FFH/execution_time.xlsx", sheet = "ex3")
+#excel_data <- read_excel("./FFH/execution_time.xlsx", sheet = "ex2_ex3")
+excel_data <- read_excel("./FFH/execution_time.xlsx", sheet = "ex2_ex3")
 
 p <- ggplot(excel_data, aes(x = factor(condition), y = answer, fill = factor(condition))) +
   geom_boxplot() +
