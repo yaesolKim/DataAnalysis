@@ -2,9 +2,9 @@
 *.xlsxs
 
 #
-.idea/s
+.idea/
 .RData
 .Rhistory
 
 # Resulting Plots
-*.pdfss
+*.pdf
