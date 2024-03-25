@@ -8,7 +8,7 @@ library(RColorBrewer)
 #excel_data <- read_excel("execution_time.xlsx", sheet = "ex2")
 #excel_data <- read_excel("execution_time.xlsx", sheet = "ex3")
 #excel_data <- read_excel("execution_time.xlsx", sheet = "ex2_ex3")
-excel_data <- read_excel("questionnaires.xlsx", sheet = "Sheet3")
+excel_data <- read_excel("/FFH/questionnaires.xlsx", sheet = "Sheet3")
 
 variety <- factor(excel_data$question)
 treatment <- factor(excel_data$condition)

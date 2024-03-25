@@ -1,10 +1,10 @@
-# Private Data
-*.xlsxs
-
-#
+# Ignore
 .idea/
 .RData
 .Rhistory
+
+# Private Data
+FFH/
 
 # Resulting Plots
 *.pdf
