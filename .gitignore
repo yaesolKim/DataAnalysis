@@ -1,8 +1,8 @@
 # Private Data
-Data/
+*.xlsxs
 
 #
-.idea/
+.idea/s
 .RData
 .Rhistory
 
