@@ -6,6 +6,7 @@
 
 # Private Data
 ETH_VIC/
+FFH/
 
 # Resulting Plots
 *.pdf
