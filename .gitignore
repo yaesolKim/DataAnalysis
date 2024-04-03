@@ -2,6 +2,7 @@
 .idea/
 .RData
 .Rhistory
+.DS_Store
 
 # Private Data
 ETH_VIC/

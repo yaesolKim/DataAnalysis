@@ -3,6 +3,8 @@ library(ggplot2)
 library(readxl)
 library(RColorBrewer)
 
+# Read data from Excel file
+excel_data <- read_excel("./FFH/exp2.xlsx", sheet = "nasa_tlx")
 
 label_x = "Scenario"
 label_y = "Nasa TLX Score (7-point Likert Scale)"
@@ -18,8 +20,6 @@ print(p)
 
 #########
 
-# Read data from Excel file
-excel_data <- read_excel("./FFH/exp2.xlsx", sheet = "nasa_tlx")
 
 variety <- factor(excel_data$question)
 treatment <- factor(excel_data$condition)
