@@ -43,6 +43,9 @@ draw_bar_plots <- function(datasetname, label_y, color, doc_title) {
   summarize(mean_execution_time = mean(execution_time),
             sd_execution_time = sd(execution_time))
 
+  print(mean_data$mean_execution_time)
+  print(mean_data$sd_execution_time)
+
   p <- ggplot(mean_data, aes(x = condition, y = mean_execution_time, fill = condition)) +
   geom_bar(stat = "identity", position = "dodge") +
   scale_fill_manual(values = color_value, name = NULL) + # Use values argument here

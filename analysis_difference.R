@@ -3,95 +3,131 @@ library(ggplot2)
 library(readxl)
 library(RColorBrewer)
 
-# select data sheet
-#excel_data <- read_excel("./FFH/exp1.xlsx", sheet = "fps_1")
-#excel_data <- read_excel("./FFH/exp1.xlsx", sheet = "ftime_1")
-#excel_data <- read_excel("./FFH/exp1.xlsx", sheet = "fps_2")
-#excel_data <- read_excel("./FFH/exp1.xlsx", sheet = "ftime_2")
+# normality test with data type B
+check_normality_B <- function(dataset, group1, group2, qu, data) {
 
-o <- excel_data$Original
-o2 <- excel_data$Original2
-o4 <- excel_data$Original4
-o8 <- excel_data$Original8
-c2 <- excel_data$Cut2
-c4 <- excel_data$Cut4
-c8 <- excel_data$Cut8
+  #data1 <- subset(dataset, condition_abb == group1 & question_abb == qu)[[data]]
+  #data2 <- subset(dataset, condition_abb == group2 & question_abb == qu)[[data]]
 
-# normality test
+  data1 <- subset(dataset, condition_abb == group1 & question == qu)[[data]]
+  data2 <- subset(dataset, condition_abb == group2 & question == qu)[[data]]
 
+ ## Shapiro-Wilk Test for Normality
+ shapiro_test1 <- shapiro.test(data1)
+ shapiro_test2 <- shapiro.test(data2)
 
-# t-test 수행
-t_test <- function(datasetname, label_y, color, doc_title) {
+ ## Extract the p-value from the test result
+ p_value1 <- shapiro_test1$p.value
+ p_value2 <- shapiro_test2$p.value
 
-  result1 <- t.test(o, o2)
-t_test_table1 <- data.frame(
-  Statistics = c("t", "df", "p-value", "Mean_Original", "Mean_Original2"),
-  Values = c(sprintf("%.2f", result1$statistic), sprintf("%.2f",result1$parameter), sprintf("%.2f", result1$p.value), sprintf("%.2f", mean(o, na.rm = TRUE)), sprintf("%.2f", mean(o2, na.rm = TRUE)))
-)
-print(t_test_table1)
+ # Check if the data is normally distributed based on the p-value
+ if (p_value1 > 0.05) {
+   print("The data1 is normally distributed (p > 0.05), do the t test")
+   print(shapiro_test1)
+ } else {
+   print("The data1 is not normally distributed (p <= 0.05)")
+   print(shapiro_test1)
+ }
 
-
-  if(color == "green") {
-    color_value <- c("#baf2e7", "#3bceb1") # parapet
-  } else if(color == "blue") {
-    color_value <- c("#dbf3ff", "#7aafff") # scaffold
-  } else {
-    # Default values if color doesn't match any condition
-    color_value <- c("red", "green")  # You can adjust these default values as needed
+  if (p_value2 > 0.05) {
+   print("The data2 is normally distributed (p > 0.05), do the t test")
+    print(shapiro_test2)
+ } else {
+   print("The data2 is not normally distributed (p <= 0.05)")
+   print(shapiro_test2)
+ }
   }
 
-  mean_data <- datasetname %>%
-  group_by(condition) %>%
-  summarize(mean_execution_time = mean(execution_time),
-            sd_execution_time = sd(execution_time))
 
-  p <- ggplot(mean_data, aes(x = condition, y = mean_execution_time, fill = condition)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_manual(values = color_value, name = NULL) + # Use values argument here
-  geom_errorbar(aes(ymin = mean_execution_time - sd_execution_time, ymax = mean_execution_time + sd_execution_time),
-                width = 0.2, position = position_dodge(0.9)) +
-  labs(x = " ",  y = label_y) +
-  ylim(0, 400) +
-  theme(aspect.ratio = 2, legend.position = "bottom")
 
-  ggsave(doc_title, plot = p)
+
+
+# normality test with data type A
+check_normality_A <- function(dataset, group1, group2, data) {
+
+  data1 <- subset(dataset, condition == group1)[[data]]
+  data2 <- subset(dataset, condition == group2)[[data]]
+
+ ## Shapiro-Wilk Test for Normality
+ shapiro_test1 <- shapiro.test(data1)
+ shapiro_test2 <- shapiro.test(data2)
+
+ ## Extract the p-value from the test result
+ p_value1 <- shapiro_test1$p.value
+ p_value2 <- shapiro_test2$p.value
+
+ # Check if the data is normally distributed based on the p-value
+ if (p_value1 > 0.05) {
+   print("The data1 is normally distributed (p > 0.05), do the t test")
+   print(shapiro_test1)
+ } else {
+   print("The data1 is not normally distributed (p <= 0.05)")
+   print(shapiro_test1)
+ }
+
+  if (p_value2 > 0.05) {
+   print("The data2 is normally distributed (p > 0.05), do the t test")
+    print(shapiro_test2)
+ } else {
+   print("The data2 is not normally distributed (p <= 0.05)")
+   print(shapiro_test2)
+ }
+}
+
+# t-test : 두 그룹 평균 비교
+# Independent t test: 독립된 두 그룹 간 평균 비교
+# Paired T test: 동일 개체 혹은 동일 단위의 두 관측치 간 평균 비교
+t_test_A <- function(dataset, group1, group2, data) {
+  data1 <- subset(dataset, condition == group1)[[data]]
+  data2 <- subset(dataset, condition == group2)[[data]]
+
+  result <- t.test(data1, data2)
+
+  t_test_table <- data.frame(
+  Statistics = c("t", "df", "p-value", "Mean of data1", "Mean of data2"),
+  Values = c(sprintf("%.2f", result$statistic), sprintf("%.2f",result$parameter), sprintf("%.2f", result$p.value), sprintf("%.2f", mean(group1, na.rm = TRUE)), sprintf("%.2f", mean(group2, na.rm = TRUE)))
+  )
+  print(t_test_table)
+
+}
+
+t_test <- function(group1, group2, label_1, label_2, doc_title) {
+
+  result <- t.test(group1, group2)
+  t_test_table <- data.frame(
+  Statistics = c("t", "df", "p-value", label_1, label_2),
+  Values = c(sprintf("%.2f", result$statistic), sprintf("%.2f",result$parameter), sprintf("%.2f", result$p.value), sprintf("%.2f", mean(group1, na.rm = TRUE)), sprintf("%.2f", mean(group2, na.rm = TRUE)))
+  )
+  print(t_test_table)
 
 }
 
 
+# ANOVA: 세 개 이상의 그룹 평균 비교
+# one way anova: 하나의 독립 변수를 기준으로 비교
+# two way anova: 두개 이상의 변수를 고려하여 그룹 비교
+# RM anova
+anova <- function(gropu1, group2, label_1, label_2, doc_title) {
+}
 
-result2 <- t.test(o, o4)
-t_test_table2 <- data.frame(
-  Statistics = c("t", "df", "p-value", "Mean_Original", "Mean_Original2"),
-  Values = c(sprintf("%.2f", result2$statistic), sprintf("%.2f",result2$parameter), sprintf("%.2f", result2$p.value), sprintf("%.2f", mean(o, na.rm = TRUE)), sprintf("%.2f", mean(o4, na.rm = TRUE)))
-)
-print(t_test_table2)
+# Non parametric method: 데이터가 정규분포를 따르지 않거나 등분산성을 만족하지 않을 때.
+# wilcoxon rank-sum test
 
-result3 <- t.test(o, o8)
-t_test_table3 <- data.frame(
-  Statistics = c("t", "df", "p-value", "Mean_Original", "Mean_Original2"),
-  Values = c(sprintf("%.2f", result3$statistic), sprintf("%.2f",result3$parameter), sprintf("%.2f", result3$p.value), sprintf("%.2f", mean(o, na.rm = TRUE)), sprintf("%.2f", mean(o8, na.rm = TRUE)))
-)
-print(t_test_table3)
+wilcox_test_A <- function(dataset, group1, group2, data) {
 
-result4 <- t.test(o, c2)
-t_test_table4 <- data.frame(
-  Statistics = c("t", "df", "p-value", "Mean_Original", "Mean_Original2"),
-  Values = c(sprintf("%.2f", result4$statistic), sprintf("%.2f",result4$parameter), sprintf("%.2f", result4$p.value), sprintf("%.2f", mean(o, na.rm = TRUE)), sprintf("%.2f", mean(c2, na.rm = TRUE)))
-)
-print(t_test_table4)
+  data1 <- subset(dataset, condition == group1)[[data]]
+  data2 <- subset(dataset, condition == group2)[[data]]
+  wilcox.test(data1, data2)
+}
 
-result5 <- t.test(o, c4)
-t_test_table5 <- data.frame(
-  Statistics = c("t", "df", "p-value", "Mean_Original", "Mean_Original2"),
-  Values = c(sprintf("%.2f", result5$statistic), sprintf("%.2f",result5$parameter), sprintf("%.2f", result5$p.value), sprintf("%.2f", mean(o, na.rm = TRUE)), sprintf("%.2f", mean(c4, na.rm = TRUE)))
-)
-print(t_test_table5)
+wilcox_test_B <- function(dataset, group1, group2, qu, data) {
 
-result6 <- t.test(o, c8)
-t_test_table6 <- data.frame(
-  Statistics = c("t", "df", "p-value", "Mean_Original", "Mean_Original2"),
-  Values = c(sprintf("%.2f", result6$statistic), sprintf("%.2f",result6$parameter), sprintf("%.2f", result6$p.value), sprintf("%.2f", mean(o, na.rm = TRUE)), sprintf("%.2f", mean(c8, na.rm = TRUE)))
-)
-print(t_test_table6)
+#  data1 <- subset(dataset, condition_abb == group1 & question_abb == qu)[[data]]
+#  data2 <- subset(dataset, condition_abb == group2 & question_abb == qu)[[data]]
+
+  data1 <- subset(dataset, condition_abb == group1 & question == qu)[[data]]
+  data2 <- subset(dataset, condition_abb == group2 & question == qu)[[data]]
+  wilcox.test(data1, data2)
+}
+# Kruskal wallis test
 
